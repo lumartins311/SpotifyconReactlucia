@@ -13,6 +13,7 @@ const Home = () => {
 	const [canciones, setCanciones] = useState([])//en este guardo la cancion que tengamos seleccionada cuando hago click
 	const [Index, setIndex] = useState([])
 	const [url, setUrl] = useState("")// estado para la url que esta seleccionada
+	const [search, setSearch] = useState("");
 
 	const [stateCancion, setStateCancion] = useState("Reproducir")//para cambiar el icono de reproducir
 	console.log(canciones);
@@ -40,7 +41,10 @@ const Home = () => {
 
 	// }
 
-
+	const searcher = (e) => {//esta funcion es la que busca
+		setSearch(e.target.value)
+		console.log(e.target.value)
+	}
 
 	function obtenerCanciones() {
 		fetch('https://playground.4geeks.com/apis/fake/sound/all')
@@ -103,8 +107,9 @@ const Home = () => {
 
 
 	return (
-		<div className="" style={{ width: "600px" }}>
-			<ul className="text-left text-light fs-4 text lh-lg mx-3 position-absolute top-0 start-50 translate-middle-x bg-dark" style={{ width: "600px" }}>
+		<div className="bg-primary " style={{ width: "600px" }}>
+
+			<ul className="text-left text-light fs-4 text lh-lg mx-3 my-5 position-absolute top-0 start-50 p-6 translate-middle-x bg-dark" style={{ width: "600px" }}>
 				{/* [<li>Morty Smith</li>,<li>Rick Sanchez</li> ] */}
 				{canciones.map(function (item, index) {
 					return <li role="button" key={item.id} className={`d-flex flex-row opacity-${selected === index ? `75` : `100`}`} style={{ textDecoration: "underline" }} onClick={() => SeleccionarCancion(item.url, index)}>
@@ -113,11 +118,22 @@ const Home = () => {
 					</li>
 				})}
 			</ul>
-			<div className="bg-dark position-fixed bottom-0 start-50 translate-middle-x w-100 p-3">
+			<nav className="navbar bg-primary position-fixed top-0 start-50 translate-middle-x w-100 position-absolute">
+				<div className="container-fluid">
+					<a className="navbar-brand">Lista de Musica</a>
+					<form className="d-flex">
+						<input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={search} onChange={searcher} />
+						<button className="btn btn-outline-success" type="submit">Search</button>
+					</form>
+				</div>
+			</nav>
+			<div className="bg-primary position-fixed bottom-0 start-50 translate-middle-x w-100 p-3">
 				<audio ref={inputElement} src={url} ></audio>
-				<button className="" onClick={previus}>anterior</button>
-				<button className="" onClick={ponerCancion}>{stateCancion === "Reproducir" ? <FontAwesomeIcon icon={faPlay} /> : <FontAwesomeIcon icon={faPause} />}</button>
-				<button className="" onClick={next}>next</button>
+				<div className="d-flex justify-content-center">
+					<button className="btn btn-success m-2" onClick={previus}>Anterior</button>
+					<button className="btn btn-success m-2" onClick={ponerCancion}>{stateCancion === "Reproducir" ? <FontAwesomeIcon icon={faPlay} /> : <FontAwesomeIcon icon={faPause} />}</button>
+					<button className="btn btn-success m-2" onClick={next}>Siguiente</button>
+				</div>
 			</div>
 		</div>
 
